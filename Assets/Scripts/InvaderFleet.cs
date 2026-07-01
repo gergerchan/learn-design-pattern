@@ -5,6 +5,7 @@ using UnityEngine;
 public class InvaderFleet : MonoBehaviour
 {
     [SerializeField] GameObject invaderPrefab;
+    [SerializeField] Transform spawnOrigin;
     [SerializeField] Sprite[] rowSprites;
     [SerializeField] int rows = 3;
     [SerializeField] int cols = 8;
@@ -35,10 +36,13 @@ public class InvaderFleet : MonoBehaviour
         moveDirection = -1;
         isActive = true;
 
-        transform.position = Vector3.zero;
+        Vector3 origin = spawnOrigin != null
+            ? spawnOrigin.position
+            : new Vector3(0f, Camera.main.orthographicSize * 0.55f, 0f);
+        transform.position = origin;
 
         float startX = -(cols - 1) * spacingX * 0.5f;
-        float startY = Camera.main.orthographicSize * 0.55f;
+        float startY = 0f;
 
         for (int r = 0; r < rows; r++)
         {

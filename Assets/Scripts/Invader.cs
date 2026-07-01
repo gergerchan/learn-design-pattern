@@ -15,5 +15,7 @@ public class Invader : MonoBehaviour
         ObjectPoolManager.Return(other.gameObject);
         parentFleet.OnInvaderDestroyed(gameObject);
         ObjectPoolManager.Return(gameObject);
+        
+        VfxManager.Instance?.SpawnVfx("vfx-explosion", other.transform.position, Quaternion.identity);
     }
 }

@@ -63,7 +63,7 @@ public class ShipController : MonoBehaviour
     void HandleFire()
     {
         if (isReloading) return;
-        if (!Keyboard.current.spaceKey.wasPressedThisFrame) return;
+        if (!Keyboard.current.spaceKey.isPressed) return;
         if (Time.time < nextFireTime) return;
         if (bulletsRemaining <= 0) return;
 
@@ -75,6 +75,7 @@ public class ShipController : MonoBehaviour
         nextFireTime = Time.time + fireRate;
         bulletsRemaining--;
         EventBus.PublishAmmoChanged(bulletsRemaining, maxAmmo);
+        AudioManager.Instance?.PlaySfx("sfx-shoot");
 
         Vector3 spawnPos = transform.position + Vector3.up * 0.6f;
         GameObject go = ObjectPoolManager.Get(projectilePrefab, spawnPos, Quaternion.identity);
