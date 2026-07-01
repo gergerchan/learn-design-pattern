@@ -1,10 +1,11 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Pool;
 
 public class ShipController : MonoBehaviour
 {
-    [SerializeField] GameObject projectilePrefab;
+    [SerializeField] Projectile projectilePrefab;
     [SerializeField] float moveSpeed = 6f;
     [SerializeField] float projectileSpeed = 12f;
     [SerializeField] float fireRate = 0.3f;
@@ -19,9 +20,40 @@ public class ShipController : MonoBehaviour
     float nextFireTime;
     float horizontalLimit;
 
+    IObjectPool<Projectile> projectilePool;
+
     void Awake()
     {
         hud = Object.FindFirstObjectByType<HUD>();
+
+        projectilePool = new ObjectPool<Projectile>(
+            createFunc: () => Instantiate(projectilePrefab),
+            actionOnGet: (projectile) => projectile.gameObject.SetActive(true),
+            actionOnRelease: (projectile) => projectile.gameObject.SetActive(false),
+            actionOnDestroy: (projectile) => Destroy(projectile.gameObject),
+            defaultCapacity: maxAmmo,
+            maxSize: maxAmmo
+        );
+    }
+
+    Projectile CreateProjectile()
+    {
+        return Instantiate(projectilePrefab);
+    }
+
+    void OnGetProjectile(Projectile projectile)
+    {
+        projectile.gameObject.SetActive(true);
+    }
+
+    void OnReleaseProjectile(Projectile projectile)
+    {
+        projectile.gameObject.SetActive(false);
+    }
+
+    void OnDestroyProjectile(Projectile projectile)
+    {
+        Destroy(projectile.gameObject);
     }
 
     void Start()
@@ -79,8 +111,11 @@ public class ShipController : MonoBehaviour
         hud.UpdateAmmo(bulletsRemaining, maxAmmo);
 
         Vector3 spawnPos = transform.position + Vector3.up * 0.6f;
-        GameObject go = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
-        go.GetComponent<Projectile>().Launch(projectileSpeed);
+
+        Projectile projectile = projectilePool.Get();
+
+        projectile.transform.position = spawnPos;
+        projectile.Launch(projectileSpeed, projectilePool);
 
         if (bulletsRemaining <= 0)
             StartCoroutine(AutoReloadRoutine());

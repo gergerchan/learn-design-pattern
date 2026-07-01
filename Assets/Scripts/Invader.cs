@@ -12,7 +12,10 @@ public class Invader : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Projectile")) return;
-        Destroy(other.gameObject);
+        
+        Projectile proj = other.GetComponent<Projectile>();
+        proj.ReleaseToPool();
+
         parentFleet.OnInvaderDestroyed(gameObject);
         Destroy(gameObject);
     }
