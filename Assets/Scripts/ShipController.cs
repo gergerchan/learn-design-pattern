@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class ShipController : MonoBehaviour
 {
-    [SerializeField] GameObject projectilePrefab;
+    // [SerializeField] GameObject projectilePrefab;
     [SerializeField] float moveSpeed = 6f;
     [SerializeField] float projectileSpeed = 12f;
     [SerializeField] float fireRate = 0.3f;
@@ -79,7 +79,8 @@ public class ShipController : MonoBehaviour
         hud.UpdateAmmo(bulletsRemaining, maxAmmo);
 
         Vector3 spawnPos = transform.position + Vector3.up * 0.6f;
-        GameObject go = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
+        // GameObject go = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
+        GameObject go = ProjectilePoolManager.Instance.SpawnProjectile(spawnPos, Quaternion.identity);
         go.GetComponent<Projectile>().Launch(projectileSpeed);
 
         if (bulletsRemaining <= 0)

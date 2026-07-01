@@ -914,18 +914,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f916336408e814e34a3d8802fa031ee9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShipController
-  projectilePrefab: {fileID: 8176882831814245835, guid: e66299a6c52884e6d87d07356655bb1b, type: 3}
   moveSpeed: 6
   projectileSpeed: 12
-  fireRate: 0.3
-  maxAmmo: 5
+  fireRate: 0.01
+  maxAmmo: 50
   reloadDuration: 1.5
-  hud: {fileID: 0}
-  isActive: 0
-  isReloading: 0
-  bulletsRemaining: 0
-  nextFireTime: 0
-  horizontalLimit: 0
 --- !u!212 &463158400
 SpriteRenderer:
   serializedVersion: 2
@@ -1415,6 +1408,7 @@ GameObject:
   - component: {fileID: 687401187}
   - component: {fileID: 687401186}
   - component: {fileID: 687401185}
+  - component: {fileID: 687401188}
   m_Layer: 0
   m_Name: GameControl
   m_TagString: Untagged
@@ -1460,9 +1454,6 @@ MonoBehaviour:
   hud: {fileID: 687401185}
   ship: {fileID: 463158399}
   fleet: {fileID: 1231883484}
-  isPlaying: 0
-  timer: 0
-  bestTime: 0
 --- !u!4 &687401187
 Transform:
   m_ObjectHideFlags: 0
@@ -1478,6 +1469,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &687401188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 687401184}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6f4c8a3de0c84bd0a6e18bb5cc176f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectilePoolManager
+  projectilePrefab: {fileID: 8176882831814245835, guid: e66299a6c52884e6d87d07356655bb1b, type: 3}
 --- !u!1 &763334014
 GameObject:
   m_ObjectHideFlags: 0
@@ -2061,12 +2065,6 @@ MonoBehaviour:
   dropSize: 0.6
   stepInterval: 1
   stepsPerDrop: 5
-  activeInvaders: []
-  aliveCount: 0
-  stepCount: 0
-  moveDirection: -1
-  isActive: 0
-  playerRowY: 0
 --- !u!4 &1231883485
 Transform:
   m_ObjectHideFlags: 0
