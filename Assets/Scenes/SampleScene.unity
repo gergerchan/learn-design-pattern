@@ -920,12 +920,6 @@ MonoBehaviour:
   fireRate: 0.3
   maxAmmo: 5
   reloadDuration: 1.5
-  hud: {fileID: 0}
-  isActive: 0
-  isReloading: 0
-  bulletsRemaining: 0
-  nextFireTime: 0
-  horizontalLimit: 0
 --- !u!212 &463158400
 SpriteRenderer:
   serializedVersion: 2
@@ -1416,7 +1410,7 @@ GameObject:
   - component: {fileID: 687401186}
   - component: {fileID: 687401185}
   m_Layer: 0
-  m_Name: GameControl
+  m_Name: GameManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1460,9 +1454,6 @@ MonoBehaviour:
   hud: {fileID: 687401185}
   ship: {fileID: 463158399}
   fleet: {fileID: 1231883484}
-  isPlaying: 0
-  timer: 0
-  bestTime: 0
 --- !u!4 &687401187
 Transform:
   m_ObjectHideFlags: 0
@@ -2061,12 +2052,6 @@ MonoBehaviour:
   dropSize: 0.6
   stepInterval: 1
   stepsPerDrop: 5
-  activeInvaders: []
-  aliveCount: 0
-  stepCount: 0
-  moveDirection: -1
-  isActive: 0
-  playerRowY: 0
 --- !u!4 &1231883485
 Transform:
   m_ObjectHideFlags: 0
