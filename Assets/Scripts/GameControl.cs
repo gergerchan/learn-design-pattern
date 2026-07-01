@@ -2,10 +2,15 @@ using UnityEngine;
 
 public class GameControl : MonoBehaviour
 {
+    public static event System.Action<float> OnGameShowMainMenu;
+    public static event System.Action OnGameStart;
+    public static event System.Action<float> OnGameUpdateTimer;
+    public static event System.Action OnGameLose;
+    public static event System.Action<float, bool, float> OnGameWin;
     // Singleton instance
     public static GameControl instance;
 
-    [SerializeField] HUD hud;
+    // [SerializeField] HUD hud;
     [SerializeField] ShipController ship;
     [SerializeField] InvaderFleet fleet;
 
@@ -42,16 +47,14 @@ public class GameControl : MonoBehaviour
 
     void Start()
     {
-        if (hud != null)
-            hud.ShowMainMenu(bestTime);
+        OnGameShowMainMenu?.Invoke(bestTime); // hud.ShowMainMenu(bestTime);
     }
 
     void Update()
     {
         if (!isPlaying) return;
         timer += Time.deltaTime;
-        if (hud != null)
-            hud.UpdateTimer(timer);
+        OnGameUpdateTimer?.Invoke(timer); // hud.UpdateTimer(timer);
     }
 
     public void StartGame()
@@ -60,7 +63,7 @@ public class GameControl : MonoBehaviour
         timer = 0f;
         if (ship != null) ship.Activate();
         if (fleet != null) fleet.SpawnFleet();
-        if (hud != null) hud.ShowGamePanel();
+        OnGameStart?.Invoke(); // hud.ShowGamePanel();
     }
 
     public void RestartGame()
@@ -83,8 +86,7 @@ public class GameControl : MonoBehaviour
             PlayerPrefs.Save();
         }
 
-        if (hud != null)
-            hud.ShowWinPanel(timer, isNewRecord, bestTime);
+        OnGameWin?.Invoke(timer, isNewRecord, bestTime); // hud.ShowWinPanel(timer, isNewRecord, bestTime);
     }
 
     public void OnFleetReachedPlayer()
@@ -92,6 +94,6 @@ public class GameControl : MonoBehaviour
         if (!isPlaying) return;
         isPlaying = false;
         if (ship != null) ship.Deactivate();
-        if (hud != null) hud.ShowLosePanel();
+        OnGameLose?.Invoke(); // hud.ShowLosePanel();
     }
 }

@@ -16,6 +16,28 @@ public class HUD : MonoBehaviour
     [SerializeField] TextMeshProUGUI winBestTimeText;
     [SerializeField] TextMeshProUGUI newRecordText;
 
+    void OnEnable()
+    {
+        GameControl.OnGameShowMainMenu += ShowMainMenu;
+        GameControl.OnGameStart += ShowGamePanel;
+        GameControl.OnGameUpdateTimer += UpdateTimer;
+        GameControl.OnGameLose += ShowLosePanel;
+        GameControl.OnGameWin += ShowWinPanel;
+        ShipController.OnAmmoUpdate += UpdateAmmo;
+        ShipController.OnAmmoReload += SetReloading;
+    }
+
+    void OnDisable()
+    {
+        GameControl.OnGameShowMainMenu -= ShowMainMenu;
+        GameControl.OnGameStart -= ShowGamePanel;
+        GameControl.OnGameUpdateTimer -= UpdateTimer;
+        GameControl.OnGameLose -= ShowLosePanel;
+        GameControl.OnGameWin -= ShowWinPanel;
+        ShipController.OnAmmoUpdate -= UpdateAmmo;
+        ShipController.OnAmmoReload -= SetReloading;
+    }
+
     public void ShowMainMenu(float bestTime)
     {
         SetPanels(true, false, false, false);
