@@ -2,9 +2,11 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+using Anoa.Module;
+
 public class ShipController : MonoBehaviour
 {
-    [SerializeField] GameObject projectilePrefab;
+    [SerializeField] PoolerContainer poolProjectile;
     [SerializeField] float moveSpeed = 6f;
     [SerializeField] float projectileSpeed = 12f;
     [SerializeField] float fireRate = 0.3f;
@@ -79,8 +81,10 @@ public class ShipController : MonoBehaviour
         hud.UpdateAmmo(bulletsRemaining, maxAmmo);
 
         Vector3 spawnPos = transform.position + Vector3.up * 0.6f;
-        GameObject go = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
-        go.GetComponent<Projectile>().Launch(projectileSpeed);
+        Projectile projectile = poolProjectile.Pop<Projectile>();
+        projectile.transform.position = spawnPos;
+        projectile.transform.rotation = Quaternion.identity;
+        projectile.Launch(projectileSpeed);
 
         if (bulletsRemaining <= 0)
             StartCoroutine(AutoReloadRoutine());

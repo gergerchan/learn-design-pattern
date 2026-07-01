@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6054970811212836598}
   - component: {fileID: 5653417655858452096}
   - component: {fileID: 6098904099694387654}
+  - component: {fileID: -5919636057272343947}
   m_Layer: 0
   m_Name: ProjectilePrefab
   m_TagString: Projectile
@@ -179,3 +180,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67cd71f13513a4c8eb1c079aa34407ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Projectile
+--- !u!114 &-5919636057272343947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8176882831814245835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6871323a5b2e34cfaaecd4af5bcac950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Anoa.Module.PoolerObject

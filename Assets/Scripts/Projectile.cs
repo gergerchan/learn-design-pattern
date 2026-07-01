@@ -9,6 +9,8 @@ public class Projectile : MonoBehaviour
     {
         travelSpeed = speed;
         topBoundary = Camera.main.orthographicSize + 1f;
+
+        transform.parent = null;
     }
 
     void Update()
@@ -16,6 +18,6 @@ public class Projectile : MonoBehaviour
         transform.position += Vector3.up * travelSpeed * Time.deltaTime;
 
         if (transform.position.y >= topBoundary)
-            Destroy(gameObject);
+            gameObject.SetActive(false);
     }
 }
