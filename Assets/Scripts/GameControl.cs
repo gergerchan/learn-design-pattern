@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class GameControl : MonoBehaviour
 {
+    // Singleton instance
     public static GameControl instance;
 
     [SerializeField] HUD hud;
@@ -14,36 +15,57 @@ public class GameControl : MonoBehaviour
 
     const string BestTimeKey = "BestTime";
 
+    public static GameControl Instance => instance;
+
     void Awake()
     {
+        // supaya cuma ada 1 GameControl aktif di scene
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        // Set object ini sebagai satu-satunya instance yang valid
         instance = this;
+
         bestTime = PlayerPrefs.GetFloat(BestTimeKey, 0f);
+    }
+
+    void OnDestroy()
+    {
+        // Bersihkan referensi singleton saat object ini di-destroy,
+        // supaya gak nyisain reference ke instance yang udah gak valid
+        if (instance == this)
+            instance = null;
     }
 
     void Start()
     {
-        hud.ShowMainMenu(bestTime);
+        if (hud != null)
+            hud.ShowMainMenu(bestTime);
     }
 
     void Update()
     {
         if (!isPlaying) return;
         timer += Time.deltaTime;
-        hud.UpdateTimer(timer);
+        if (hud != null)
+            hud.UpdateTimer(timer);
     }
 
     public void StartGame()
     {
         isPlaying = true;
         timer = 0f;
-        ship.Activate();
-        fleet.SpawnFleet();
-        hud.ShowGamePanel();
+        if (ship != null) ship.Activate();
+        if (fleet != null) fleet.SpawnFleet();
+        if (hud != null) hud.ShowGamePanel();
     }
 
     public void RestartGame()
     {
-        fleet.ClearFleet();
+        if (fleet != null) fleet.ClearFleet();
         StartGame();
     }
 
@@ -51,7 +73,7 @@ public class GameControl : MonoBehaviour
     {
         if (!isPlaying) return;
         isPlaying = false;
-        ship.Deactivate();
+        if (ship != null) ship.Deactivate();
 
         bool isNewRecord = bestTime <= 0f || timer < bestTime;
         if (isNewRecord)
@@ -61,14 +83,15 @@ public class GameControl : MonoBehaviour
             PlayerPrefs.Save();
         }
 
-        hud.ShowWinPanel(timer, isNewRecord, bestTime);
+        if (hud != null)
+            hud.ShowWinPanel(timer, isNewRecord, bestTime);
     }
 
     public void OnFleetReachedPlayer()
     {
         if (!isPlaying) return;
         isPlaying = false;
-        ship.Deactivate();
-        hud.ShowLosePanel();
+        if (ship != null) ship.Deactivate();
+        if (hud != null) hud.ShowLosePanel();
     }
 }
