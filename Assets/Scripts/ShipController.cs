@@ -3,9 +3,14 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 using Anoa.Module;
+using System;
 
 public class ShipController : MonoBehaviour
 {
+
+    public static event Action<int, int> OnAmmoChanged;
+    public static event Action<bool> OnReloadingChanged;
+
     [SerializeField] PoolerContainer poolProjectile;
     [SerializeField] float moveSpeed = 6f;
     [SerializeField] float projectileSpeed = 12f;
@@ -23,7 +28,7 @@ public class ShipController : MonoBehaviour
 
     void Awake()
     {
-        hud = Object.FindFirstObjectByType<HUD>();
+        // hud = Object.FindFirstObjectByType<HUD>();
     }
 
     void Start()
@@ -38,8 +43,10 @@ public class ShipController : MonoBehaviour
         isReloading = false;
         bulletsRemaining = maxAmmo;
         nextFireTime = 0f;
-        hud.UpdateAmmo(bulletsRemaining, maxAmmo);
-        hud.SetReloading(false);
+        // hud.UpdateAmmo(bulletsRemaining, maxAmmo);
+        OnAmmoChanged?.Invoke(bulletsRemaining, maxAmmo);
+        OnReloadingChanged?.Invoke(false);
+        // hud.SetReloading(false);
     }
 
     public void Deactivate()
@@ -78,7 +85,8 @@ public class ShipController : MonoBehaviour
     {
         nextFireTime = Time.time + fireRate;
         bulletsRemaining--;
-        hud.UpdateAmmo(bulletsRemaining, maxAmmo);
+        OnAmmoChanged?.Invoke(bulletsRemaining, maxAmmo);
+        // hud.UpdateAmmo(bulletsRemaining, maxAmmo);
 
         Vector3 spawnPos = transform.position + Vector3.up * 0.6f;
         Projectile projectile = poolProjectile.Pop<Projectile>();
@@ -93,11 +101,14 @@ public class ShipController : MonoBehaviour
     IEnumerator AutoReloadRoutine()
     {
         isReloading = true;
-        hud.SetReloading(true);
+        // hud.SetReloading(true);
+        OnReloadingChanged?.Invoke(true);
         yield return new WaitForSeconds(reloadDuration);
         bulletsRemaining = maxAmmo;
         isReloading = false;
-        hud.SetReloading(false);
-        hud.UpdateAmmo(bulletsRemaining, maxAmmo);
+        // hud.SetReloading(false);
+        // hud.UpdateAmmo(bulletsRemaining, maxAmmo);
+        OnReloadingChanged?.Invoke(false);
+        OnAmmoChanged?.Invoke(bulletsRemaining, maxAmmo);
     }
 }

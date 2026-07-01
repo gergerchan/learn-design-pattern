@@ -16,6 +16,19 @@ public class HUD : MonoBehaviour
     [SerializeField] TextMeshProUGUI winBestTimeText;
     [SerializeField] TextMeshProUGUI newRecordText;
 
+
+    private void OnEnable() {
+        ShipController.OnAmmoChanged += OnAmmoChanged;
+        ShipController.OnReloadingChanged += OnReloadingChanged;
+        GameManager.OnTimeChanged += UpdateTimer;
+    }
+
+    private void OnDisable() {
+        ShipController.OnAmmoChanged -= OnAmmoChanged;
+        ShipController.OnReloadingChanged -= OnReloadingChanged;
+        GameManager.OnTimeChanged -= UpdateTimer;
+    }
+
     public void ShowMainMenu(float bestTime)
     {
         SetPanels(true, false, false, false);
@@ -41,20 +54,35 @@ public class HUD : MonoBehaviour
         SetPanels(false, false, false, true);
     }
 
-    public void UpdateTimer(float time)
+    private void UpdateTimer(float time)
     {
         timerText.text = FormatTime(time);
     }
 
-    public void UpdateAmmo(int current, int max)
+    // public void UpdateTimer(float time)
+    // {
+    //     timerText.text = FormatTime(time);
+    // }
+
+    private void OnAmmoChanged(int current, int max)
     {
         ammoText.text = "Ammo: " + current + "/" + max;
     }
 
-    public void SetReloading(bool reloading)
+    // public void UpdateAmmo(int current, int max)
+    // {
+    //     ammoText.text = "Ammo: " + current + "/" + max;
+    // }
+
+    private void OnReloadingChanged(bool reloading)
     {
         reloadingText.gameObject.SetActive(reloading);
     }
+
+    // public void SetReloading(bool reloading)
+    // {
+    //     reloadingText.gameObject.SetActive(reloading);
+    // }
 
     void SetPanels(bool menu, bool game, bool win, bool lose)
     {
