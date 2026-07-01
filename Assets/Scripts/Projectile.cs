@@ -16,6 +16,6 @@ public class Projectile : MonoBehaviour
         transform.position += Vector3.up * travelSpeed * Time.deltaTime;
 
         if (transform.position.y >= topBoundary)
-            Destroy(gameObject);
+            ObjectPoolManager.Return(gameObject);
     }
 }

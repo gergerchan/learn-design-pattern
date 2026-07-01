@@ -22,6 +22,7 @@ public class ShipController : MonoBehaviour
     void Awake()
     {
         hud = Object.FindFirstObjectByType<HUD>();
+        ObjectPoolManager.RegisterPrefab(projectilePrefab, initialSize: 5, maxSize: 20);
     }
 
     void Start()
@@ -79,7 +80,7 @@ public class ShipController : MonoBehaviour
         hud.UpdateAmmo(bulletsRemaining, maxAmmo);
 
         Vector3 spawnPos = transform.position + Vector3.up * 0.6f;
-        GameObject go = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
+        GameObject go = ObjectPoolManager.Get(projectilePrefab, spawnPos, Quaternion.identity);
         go.GetComponent<Projectile>().Launch(projectileSpeed);
 
         if (bulletsRemaining <= 0)

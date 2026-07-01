@@ -25,6 +25,7 @@ public class InvaderFleet : MonoBehaviour
     void Awake()
     {
         playerRowY = Object.FindFirstObjectByType<ShipController>().transform.position.y;
+        ObjectPoolManager.RegisterPrefab(invaderPrefab, initialSize: rows * cols, maxSize: rows * cols + 10);
     }
 
     public void SpawnFleet()
@@ -44,8 +45,8 @@ public class InvaderFleet : MonoBehaviour
             for (int c = 0; c < cols; c++)
             {
                 Vector3 localPos = new Vector3(startX + c * spacingX, startY - r * spacingY, 0f);
-                GameObject obj = Instantiate(invaderPrefab, transform);
-                obj.transform.localPosition = localPos;
+                Vector3 worldPos = transform.TransformPoint(localPos);
+                GameObject obj = ObjectPoolManager.Get(invaderPrefab, worldPos, Quaternion.identity, transform);
 
                 if (rowSprites != null && r < rowSprites.Length)
                     obj.GetComponent<SpriteRenderer>().sprite = rowSprites[r];
@@ -65,7 +66,7 @@ public class InvaderFleet : MonoBehaviour
 
         foreach (GameObject obj in activeInvaders)
         {
-            if (obj != null) Destroy(obj);
+            if (obj != null) ObjectPoolManager.Return(obj);
         }
 
         activeInvaders.Clear();
