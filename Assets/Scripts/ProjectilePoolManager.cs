@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -6,7 +7,11 @@ public class ProjectilePoolManager : MonoBehaviour
     public static ProjectilePoolManager Instance;
 
     [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private int initialPoolSize = 10;
+    [SerializeField] private int maxPoolSize = 50;
     private ObjectPool<GameObject> _pool;
+
+
 
     void Awake()
     {
@@ -18,10 +23,21 @@ public class ProjectilePoolManager : MonoBehaviour
             actionOnRelease: OnReturnFromPool,
             actionOnDestroy: OnDestroyPoolObject,
             collectionCheck: true,
-            defaultCapacity: 2,
-            maxSize: 50
+            defaultCapacity: initialPoolSize,
+            maxSize: maxPoolSize
+        );
+        
+        var temp = new List<GameObject>();
 
-    );
+        for (int i = 0; i < initialPoolSize; i++)
+        {
+            temp.Add(_pool.Get());
+        }
+
+        foreach (var obj in temp)
+        {
+            _pool.Release(obj);
+        }
     }
 
 
