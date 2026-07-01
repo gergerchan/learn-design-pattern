@@ -4,7 +4,6 @@ public class GameControl : MonoBehaviour
 {
     public static GameControl instance;
 
-    [SerializeField] HUD hud;
     [SerializeField] ShipController ship;
     [SerializeField] InvaderFleet fleet;
 
@@ -18,18 +17,26 @@ public class GameControl : MonoBehaviour
     {
         instance = this;
         bestTime = PlayerPrefs.GetFloat(BestTimeKey, 0f);
+        EventBus.OnAllInvadersDestroyed += HandleAllInvadersDestroyed;
+        EventBus.OnFleetReachedPlayer += HandleFleetReachedPlayer;
+    }
+
+    void OnDestroy()
+    {
+        EventBus.OnAllInvadersDestroyed -= HandleAllInvadersDestroyed;
+        EventBus.OnFleetReachedPlayer -= HandleFleetReachedPlayer;
     }
 
     void Start()
     {
-        hud.ShowMainMenu(bestTime);
+        EventBus.PublishMainMenuOpened(bestTime);
     }
 
     void Update()
     {
         if (!isPlaying) return;
         timer += Time.deltaTime;
-        hud.UpdateTimer(timer);
+        EventBus.PublishTimerUpdated(timer);
     }
 
     public void StartGame()
@@ -38,7 +45,7 @@ public class GameControl : MonoBehaviour
         timer = 0f;
         ship.Activate();
         fleet.SpawnFleet();
-        hud.ShowGamePanel();
+        EventBus.PublishGameStarted();
     }
 
     public void RestartGame()
@@ -47,7 +54,7 @@ public class GameControl : MonoBehaviour
         StartGame();
     }
 
-    public void OnAllInvadersDestroyed()
+    void HandleAllInvadersDestroyed()
     {
         if (!isPlaying) return;
         isPlaying = false;
@@ -61,14 +68,14 @@ public class GameControl : MonoBehaviour
             PlayerPrefs.Save();
         }
 
-        hud.ShowWinPanel(timer, isNewRecord, bestTime);
+        EventBus.PublishGameWon(timer, isNewRecord, bestTime);
     }
 
-    public void OnFleetReachedPlayer()
+    void HandleFleetReachedPlayer()
     {
         if (!isPlaying) return;
         isPlaying = false;
         ship.Deactivate();
-        hud.ShowLosePanel();
+        EventBus.PublishGameLost();
     }
 }

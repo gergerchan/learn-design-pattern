@@ -16,19 +16,41 @@ public class HUD : MonoBehaviour
     [SerializeField] TextMeshProUGUI winBestTimeText;
     [SerializeField] TextMeshProUGUI newRecordText;
 
-    public void ShowMainMenu(float bestTime)
+    void OnEnable()
+    {
+        EventBus.OnMainMenuOpened    += ShowMainMenu;
+        EventBus.OnGameStarted       += ShowGamePanel;
+        EventBus.OnTimerUpdated      += UpdateTimer;
+        EventBus.OnGameWon           += ShowWinPanel;
+        EventBus.OnGameLost          += ShowLosePanel;
+        EventBus.OnAmmoChanged       += UpdateAmmo;
+        EventBus.OnReloadingChanged  += SetReloading;
+    }
+
+    void OnDisable()
+    {
+        EventBus.OnMainMenuOpened    -= ShowMainMenu;
+        EventBus.OnGameStarted       -= ShowGamePanel;
+        EventBus.OnTimerUpdated      -= UpdateTimer;
+        EventBus.OnGameWon           -= ShowWinPanel;
+        EventBus.OnGameLost          -= ShowLosePanel;
+        EventBus.OnAmmoChanged       -= UpdateAmmo;
+        EventBus.OnReloadingChanged  -= SetReloading;
+    }
+
+    void ShowMainMenu(float bestTime)
     {
         SetPanels(true, false, false, false);
         mainMenuBestTimeText.text = bestTime <= 0f ? "Best: --" : "Best: " + FormatTime(bestTime);
     }
 
-    public void ShowGamePanel()
+    void ShowGamePanel()
     {
         SetPanels(false, true, false, false);
         reloadingText.gameObject.SetActive(false);
     }
 
-    public void ShowWinPanel(float time, bool isNewRecord, float bestTime)
+    void ShowWinPanel(float time, bool isNewRecord, float bestTime)
     {
         SetPanels(false, false, true, false);
         winYourTimeText.text = "Your Time: " + FormatTime(time);
@@ -36,22 +58,22 @@ public class HUD : MonoBehaviour
         newRecordText.gameObject.SetActive(isNewRecord);
     }
 
-    public void ShowLosePanel()
+    void ShowLosePanel()
     {
         SetPanels(false, false, false, true);
     }
 
-    public void UpdateTimer(float time)
+    void UpdateTimer(float time)
     {
         timerText.text = FormatTime(time);
     }
 
-    public void UpdateAmmo(int current, int max)
+    void UpdateAmmo(int current, int max)
     {
         ammoText.text = "Ammo: " + current + "/" + max;
     }
 
-    public void SetReloading(bool reloading)
+    void SetReloading(bool reloading)
     {
         reloadingText.gameObject.SetActive(reloading);
     }

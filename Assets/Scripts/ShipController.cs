@@ -11,8 +11,6 @@ public class ShipController : MonoBehaviour
     [SerializeField] int maxAmmo = 5;
     [SerializeField] float reloadDuration = 1.5f;
 
-    HUD hud;
-
     bool isActive;
     bool isReloading;
     int bulletsRemaining;
@@ -21,7 +19,6 @@ public class ShipController : MonoBehaviour
 
     void Awake()
     {
-        hud = Object.FindFirstObjectByType<HUD>();
         ObjectPoolManager.RegisterPrefab(projectilePrefab, initialSize: 5, maxSize: 20);
     }
 
@@ -37,8 +34,8 @@ public class ShipController : MonoBehaviour
         isReloading = false;
         bulletsRemaining = maxAmmo;
         nextFireTime = 0f;
-        hud.UpdateAmmo(bulletsRemaining, maxAmmo);
-        hud.SetReloading(false);
+        EventBus.PublishAmmoChanged(bulletsRemaining, maxAmmo);
+        EventBus.PublishReloadingChanged(false);
     }
 
     public void Deactivate()
@@ -77,7 +74,7 @@ public class ShipController : MonoBehaviour
     {
         nextFireTime = Time.time + fireRate;
         bulletsRemaining--;
-        hud.UpdateAmmo(bulletsRemaining, maxAmmo);
+        EventBus.PublishAmmoChanged(bulletsRemaining, maxAmmo);
 
         Vector3 spawnPos = transform.position + Vector3.up * 0.6f;
         GameObject go = ObjectPoolManager.Get(projectilePrefab, spawnPos, Quaternion.identity);
@@ -90,11 +87,11 @@ public class ShipController : MonoBehaviour
     IEnumerator AutoReloadRoutine()
     {
         isReloading = true;
-        hud.SetReloading(true);
+        EventBus.PublishReloadingChanged(true);
         yield return new WaitForSeconds(reloadDuration);
         bulletsRemaining = maxAmmo;
         isReloading = false;
-        hud.SetReloading(false);
-        hud.UpdateAmmo(bulletsRemaining, maxAmmo);
+        EventBus.PublishReloadingChanged(false);
+        EventBus.PublishAmmoChanged(bulletsRemaining, maxAmmo);
     }
 }
