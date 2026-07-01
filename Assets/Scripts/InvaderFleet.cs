@@ -108,7 +108,7 @@ public class InvaderFleet : MonoBehaviour
         if (lowestY <= playerRowY + 0.5f)
         {
             isActive = false;
-            GameControl.instance.OnFleetReachedPlayer();
+            GameManager.Instance.OnFleetReachedPlayer();
         }
     }
 
@@ -120,7 +120,7 @@ public class InvaderFleet : MonoBehaviour
         if (aliveCount <= 0)
         {
             isActive = false;
-            GameControl.instance.OnAllInvadersDestroyed();
+            GameManager.Instance.OnAllInvadersDestroyed();
         }
     }
 }

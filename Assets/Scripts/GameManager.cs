@@ -1,8 +1,8 @@
 using UnityEngine;
 
-public class GameControl : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
-    public static GameControl instance;
+    public static GameManager Instance { get; private set; }
 
     [SerializeField] HUD hud;
     [SerializeField] ShipController ship;
@@ -16,7 +16,17 @@ public class GameControl : MonoBehaviour
 
     void Awake()
     {
-        instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        } 
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+        
         bestTime = PlayerPrefs.GetFloat(BestTimeKey, 0f);
     }
 
