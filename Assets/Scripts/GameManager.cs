@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -7,6 +8,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] HUD hud;
     [SerializeField] ShipController ship;
     [SerializeField] InvaderFleet fleet;
+
+    public static event Action<float> OnTimeChanged;
 
     bool isPlaying;
     float timer;
@@ -39,7 +42,8 @@ public class GameManager : MonoBehaviour
     {
         if (!isPlaying) return;
         timer += Time.deltaTime;
-        hud.UpdateTimer(timer);
+        OnTimeChanged?.Invoke(timer);
+        // hud.UpdateTimer(timer);
     }
 
     public void StartGame()
