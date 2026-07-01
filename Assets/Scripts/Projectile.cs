@@ -18,4 +18,14 @@ public class Projectile : MonoBehaviour
         if (transform.position.y >= topBoundary)
             Destroy(gameObject);
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Invader"))
+        {
+            DeactiveAndReturn();
+            collision.GetComponent<Invader>().DestroyInvader();
+        }
+    }
+
 }

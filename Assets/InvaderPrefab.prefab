@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1504440832866356076}
   m_Layer: 0
   m_Name: InvaderPrefab
-  m_TagString: Untagged
+  m_TagString: Invader
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

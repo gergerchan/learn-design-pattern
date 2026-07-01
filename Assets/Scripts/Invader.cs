@@ -9,10 +9,14 @@ public class Invader : MonoBehaviour
         parentFleet = fleet;
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    // void OnTriggerEnter2D(Collider2D other)
+    // {
+    //     // if (!other.CompareTag("Projectile")) return;
+    //     // Destroy(other.gameObject);
+    // }
+
+    public void DestroyInvader()
     {
-        if (!other.CompareTag("Projectile")) return;
-        Destroy(other.gameObject);
         parentFleet.OnInvaderDestroyed(gameObject);
         Destroy(gameObject);
     }
