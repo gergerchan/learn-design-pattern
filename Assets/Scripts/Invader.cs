@@ -12,8 +12,8 @@ public class Invader : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Projectile")) return;
-        Destroy(other.gameObject);
+        other.gameObject.SetActive(false);
         parentFleet.OnInvaderDestroyed(gameObject);
-        Destroy(gameObject);
+        gameObject.gameObject.SetActive(false);
     }
 }

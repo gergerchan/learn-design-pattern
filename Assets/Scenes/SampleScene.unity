@@ -895,6 +895,7 @@ GameObject:
   - component: {fileID: 463158401}
   - component: {fileID: 463158400}
   - component: {fileID: 463158399}
+  - component: {fileID: 463158403}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -914,18 +915,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f916336408e814e34a3d8802fa031ee9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShipController
-  projectilePrefab: {fileID: 8176882831814245835, guid: e66299a6c52884e6d87d07356655bb1b, type: 3}
+  poolProjectile: {fileID: 463158403}
   moveSpeed: 6
   projectileSpeed: 12
   fireRate: 0.3
   maxAmmo: 5
   reloadDuration: 1.5
-  hud: {fileID: 0}
-  isActive: 0
-  isReloading: 0
-  bulletsRemaining: 0
-  nextFireTime: 0
-  horizontalLimit: 0
 --- !u!212 &463158400
 SpriteRenderer:
   serializedVersion: 2
@@ -1046,6 +1041,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &463158403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463158398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f05ff57f3c204420ea0fef4dab0675b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Anoa.Module.PoolerContainer
+  poolPrefabs:
+  - {fileID: -5919636057272343947, guid: e66299a6c52884e6d87d07356655bb1b, type: 3}
+  parent: {fileID: 0}
+  poolSize: 20
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -1460,9 +1471,6 @@ MonoBehaviour:
   hud: {fileID: 687401185}
   ship: {fileID: 463158399}
   fleet: {fileID: 1231883484}
-  isPlaying: 0
-  timer: 0
-  bestTime: 0
 --- !u!4 &687401187
 Transform:
   m_ObjectHideFlags: 0
@@ -2032,6 +2040,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1231883485}
   - component: {fileID: 1231883484}
+  - component: {fileID: 1231883486}
   m_Layer: 0
   m_Name: InvaderFleet
   m_TagString: Untagged
@@ -2051,7 +2060,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd57a598647514335a4a3faddaa4ca8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InvaderFleet
-  invaderPrefab: {fileID: 6054868162083977896, guid: e32e5562704a94e4988e605274312d55, type: 3}
+  poolInvader: {fileID: 1231883486}
   rowSprites: []
   rows: 3
   cols: 8
@@ -2061,12 +2070,6 @@ MonoBehaviour:
   dropSize: 0.6
   stepInterval: 1
   stepsPerDrop: 5
-  activeInvaders: []
-  aliveCount: 0
-  stepCount: 0
-  moveDirection: -1
-  isActive: 0
-  playerRowY: 0
 --- !u!4 &1231883485
 Transform:
   m_ObjectHideFlags: 0
@@ -2082,6 +2085,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1231883486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1231883483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f05ff57f3c204420ea0fef4dab0675b6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Anoa.Module.PoolerContainer
+  poolPrefabs:
+  - {fileID: -1243569351813266674, guid: e32e5562704a94e4988e605274312d55, type: 3}
+  parent: {fileID: 0}
+  poolSize: 5
 --- !u!1 &1285990327
 GameObject:
   m_ObjectHideFlags: 0

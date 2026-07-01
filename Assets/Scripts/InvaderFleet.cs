@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Anoa.Module;
 using UnityEngine;
 
 public class InvaderFleet : MonoBehaviour
 {
-    [SerializeField] GameObject invaderPrefab;
+    [SerializeField] PoolerContainer poolInvader;
     [SerializeField] Sprite[] rowSprites;
     [SerializeField] int rows = 3;
     [SerializeField] int cols = 8;
@@ -44,14 +45,14 @@ public class InvaderFleet : MonoBehaviour
             for (int c = 0; c < cols; c++)
             {
                 Vector3 localPos = new Vector3(startX + c * spacingX, startY - r * spacingY, 0f);
-                GameObject obj = Instantiate(invaderPrefab, transform);
-                obj.transform.localPosition = localPos;
+                Invader invader = poolInvader.Pop<Invader>();
+                invader.transform.localPosition = localPos;
 
                 if (rowSprites != null && r < rowSprites.Length)
-                    obj.GetComponent<SpriteRenderer>().sprite = rowSprites[r];
+                    invader.GetComponent<SpriteRenderer>().sprite = rowSprites[r];
 
-                obj.GetComponent<Invader>().Initialize(this);
-                activeInvaders.Add(obj);
+                invader.Initialize(this);
+                activeInvaders.Add(invader.gameObject);
             }
         }
 
@@ -65,7 +66,7 @@ public class InvaderFleet : MonoBehaviour
 
         foreach (GameObject obj in activeInvaders)
         {
-            if (obj != null) Destroy(obj);
+            if (obj != null) obj.SetActive(false);
         }
 
         activeInvaders.Clear();
